@@ -109,7 +109,7 @@ def lottery():
     datalist=[]
     year=[]
     month=[]
-    with open('D:\PythonClass\Project\發票號碼.csv', newline='') as csvfile:
+    with open('發票號碼.csv', newline='') as csvfile:
         # 讀取 CSV 檔案內容
         rows = csv.reader(csvfile)
         # 以迴圈將每一列存入list
@@ -327,7 +327,7 @@ def Draw(Data,name):
         elif(size>=30):
             size/=2
     plt.figure(figsize=(int(size),int(size)))
-    font = FontProperties(fname='msjh.ttc', size=10)
+    font = FontProperties(fname='C:\Windows\Fonts\msjh.ttc', size=10)
     plt.xticks(range(len(KEY)),KEY,fontproperties=font)
     plt.plot(KEY,VALUE)
     plt.tick_params(axis='x', rotation=90)
