@@ -13,6 +13,7 @@ from matplotlib.font_manager import FontProperties
 import matplotlib.pyplot as plt
 URL='https://www.etax.nat.gov.tw/etw-main/web/ETW183W2_'
 URLStatic='https://www.etax.nat.gov.tw/etw-main/web/ETW183W3_'
+lock=threading.Lock()
 #主選頁
 class menu:
     def __init__(self,master):
@@ -262,22 +263,20 @@ def Static(S_begin,S_end):
     for Site in visitedSite:
         t1 = threading.Thread(target=CatchStatic, args=(Site,))
         t_list.append(t1)
-    lock = threading.Lock()
-    for t in t_list:
-        t.start()
+        t_list[len(t_list)-1].start()
     for t in t_list:
         t.join()
-        CatchStatic(Site)
+        #CatchStatic(Site)
     Draw(SpecialPrizeitemlist,'SpecialPrizeitemlist')
     Draw(SpecialPrizearealist,'SpecialPrizearealist')
     Draw(SpecPrizeitemlist,'SpecPrizeitemlist')
     Draw(SpecPrizearealist,'SpecPrizearealist')
 
 def CatchStatic(Site):
-    lock.acquire()
     if(Site not in CatchedSite):
         CatchedSite.append(Site)
         html = requests.get(Site).content.decode('utf-8')
+        lock.acquire()
         global SpecialPrizeitemlist
         global SpecialPrizearealist
         global SpecPrizeitem
@@ -301,7 +300,7 @@ def CatchStatic(Site):
             for temp in list(SpecPrizeItem):
                 SpecPrizeitemlist.append(temp)
             SpecPrizearealist.append(re.split(r"[市縣]",SpecPrizearea.text)[0])
-    lock.release()
+        lock.release()
 
 def Draw(Data,name):
     NPData=np.array(Data)
